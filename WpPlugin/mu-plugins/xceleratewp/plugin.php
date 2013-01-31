@@ -28,15 +28,8 @@ class XceleratePlugin extends XceleratePlugin_Abstract {
             add_action('admin_init', create_function('', 'remove_action("admin_notices","update_nag",3);'));
             add_action('admin_head', array($this, 'remove_upgrade_nags'));
             add_filter('site_transient_update_plugins', array($this, 'disable_indiv_plugin_update_notices'));
-            //wp_enqueue_style('wpe-common', SZL_PLUGIN_URL.'/css/wpe-common.css');
-            //wp_enqueue_script('wpe-common', SZL_PLUGIN_URL.'/js/wpe-common.js',array('jquery','jquery-ui-core'));
-            //setup some vars to be user in js/wpe-common.js
-            //$popup_disabled = defined('WPE_POPUP_DISABLED')||@constant('WPE_POPUP_DISABLED')?1:false;
-            //wp_localize_script('wpe-common','wpe', array('account'=>PWP_NAME,'popup_disabled'=> $popup_disabled ) );
-            // check for admin messages
-            //if ($this->messaging_enabled() AND defined("XCEL_ENV")) {
-            //add_action('admin_init', array($this, 'check_for_notice'));
-            //}
+            // Load Styles
+	    wp_enqueue_style('xceleratewp', XCEL_PLUGIN_URL . '/css/xceleratewp.css');
             //admin menu hooks
             if (is_multisite()) {
                 $this->upload_space_load();
