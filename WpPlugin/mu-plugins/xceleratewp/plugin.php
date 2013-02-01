@@ -376,6 +376,23 @@ class XceleratePlugin extends XceleratePlugin_Abstract {
         $data = json_decode($msg['body'], true);
         return $data;
     }
+    
+    public function setTTL() {
+        global $xcel_domains,$xcel_cache_servers;
+        $blog_domain = $xcel_domains[0];
+        $args = json_encode(array('domain'=> $blog_domain));
+        $method = 'set-base-ttl';
+        $url = "http://api.xceleratewp.com/?method=".$method."&instance=" . XCELWP_INSTANCE . "&apikey=" . XCELWP_APIKEY.'&args='.urlencode($args);
+
+        $http = new WP_Http;
+        $msg = $http->get($url);
+        if (is_a($msg, 'WP_Error'))
+            return false;
+        if (!isset($msg['body']))
+            return false;
+        $data = json_decode($msg['body'], true);
+        return $data;
+    }
 
 }
 
