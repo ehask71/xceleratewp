@@ -343,17 +343,9 @@ class XceleratePlugin extends XceleratePlugin_Abstract {
         global $xcel_domains;
         $blog_domain = $xcel_domains[0];
         $method = ($live)?'get-cache-status-live':'get-cache-status';
-        $args = json_encode(array('domain'=> $blog_domain));
-        $url = "http://api.xceleratewp.com/?method=".$method."&instance=" . XCELWP_INSTANCE . "&apikey=" . XCELWP_APIKEY.'&args='.$args;
-        mail('ehask71@gmail.com', 'Xcelerate', $url);
-	 $http = new WP_Http;
-        $msg = $http->get($url);
-        if (is_a($msg, 'WP_Error'))
-            return false;
-        if (!isset($msg['body']))
-            return false;
-        $data = json_decode($msg['body'], true);
+        $args = array('domain'=> $blog_domain);
         
+        $data = $this->apiRequest($method, $args);
         if($data['cache-status'] == 'yes'){
             return '<span style="color:green;font-weight:strong;">Enabled</span>';
         }
@@ -363,34 +355,20 @@ class XceleratePlugin extends XceleratePlugin_Abstract {
     public function switchCache(){
         global $xcel_domains,$xcel_cache_servers;
         $blog_domain = $xcel_domains[0];
-        $args = json_encode(array('domain'=> $blog_domain,'varnish'=> $xcel_cache_servers[0]));
+        $args = array('domain'=> $blog_domain,'varnish'=> $xcel_cache_servers[0]);
         $method = 'switch-cache';
-        $url = "http://api.xceleratewp.com/?method=".$method."&instance=" . XCELWP_INSTANCE . "&apikey=" . XCELWP_APIKEY.'&args='.urlencode($args);
-        mail('ehask71@gmail.com', 'Xcelerate', $url);
-        $http = new WP_Http;
-        $msg = $http->get($url);
-        if (is_a($msg, 'WP_Error'))
-            return false;
-        if (!isset($msg['body']))
-            return false;
-        $data = json_decode($msg['body'], true);
+
+        $data = $this->apiRequest($method, $args);
         return $data;
     }
     
     public function setTTL() {
         global $xcel_domains,$xcel_cache_servers;
         $blog_domain = $xcel_domains[0];
-        $args = json_encode(array('domain'=> $blog_domain));
+        $args = array('domain'=> $blog_domain);
         $method = 'set-base-ttl';
-        $url = "http://api.xceleratewp.com/?method=".$method."&instance=" . XCELWP_INSTANCE . "&apikey=" . XCELWP_APIKEY.'&args='.urlencode($args);
-
-        $http = new WP_Http;
-        $msg = $http->get($url);
-        if (is_a($msg, 'WP_Error'))
-            return false;
-        if (!isset($msg['body']))
-            return false;
-        $data = json_decode($msg['body'], true);
+        
+        $data = $this->apiRequest($method, $args);
         return $data;
     }
 
