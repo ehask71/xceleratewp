@@ -115,8 +115,18 @@ class XceleratePlugin_Abstract {
         }
     }
     
-    public function call_api($method,$args=false){
-        
+    public function apiRequest($method,$args=false){
+        $args = json_encode($args);
+        $url = "http://api.xceleratewp.com/?method=".$method."&instance=" . XCELWP_INSTANCE . "&apikey=" . XCELWP_APIKEY.'&args='.urlencode($args);
+
+        $http = new WP_Http;
+        $msg = $http->get($url);
+        if (is_a($msg, 'WP_Error'))
+            return false;
+        if (!isset($msg['body']))
+            return false;
+        $data = json_decode($msg['body'], true);
+        return $data;
     }
 
 }
